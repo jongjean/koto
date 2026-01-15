@@ -38,14 +38,17 @@ async def root():
         "endpoints": {
             "health": "/health",
             "evaluate": "/api/v1/evaluate",
-            "tts": "/api/v1/tts (coming soon)",
+            "tts": "/api/v1/tts",
             "stt": "/api/v1/stt (coming soon)"
         }
     }
 
 # Routes
 from routes.evaluation import router as eval_router
+from routes.tts import router as tts_router
+
 app.include_router(eval_router)
+app.include_router(tts_router)
 
 if __name__ == "__main__":
     import uvicorn
