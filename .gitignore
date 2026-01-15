@@ -1,0 +1,135 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environment Variables
+.env
+.env.local
+.env.production
+secrets/
+*.key
+*.pem
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Build Output
+dist/
+build/
+*.tmp
+*.temp
+.cache/
+.parcel-cache/
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Database
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+sysinfo.txt
+*.apk
+*.aab
+*.unitypackage
+
+# Backup Files
+*.bak
+*.backup
+backup-*/
+*-backup-*/
+
+# Test Coverage
+coverage/
+.nyc_output/
+*.lcov
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
+
+# AI Models (큰 파일)
+*.pth
+*.bin
+*.onnx
+*.h5
+models/whisper/
+models/vits/
+
+# MinIO Data (로컬 개발용)
+minio-data/
+
+# Certificates
+*.crt
+*.cer
+*.ca-bundle
+*.p7b
+*.p7s
+*.pfx
+
+# Misc
+.hugo_build.lock
+*.pid
