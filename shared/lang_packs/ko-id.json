@@ -1,0 +1,200 @@
+{
+    "code": "ko-id",
+    "instruction_lang": "id",
+    "target_lang": "ko",
+    "name": "Bahasa Indonesia - Korean",
+    "ui_strings": {
+        "welcome": "Selamat datang di Korean Together!",
+        "start_lesson": "Mulai Pelajaran",
+        "continue_lesson": "Lanjutkan",
+        "lesson_complete": "Pelajaran Selesai!",
+        "your_score": "Skor Anda",
+        "try_again": "Coba Lagi",
+        "next_activity": "Aktivitas Berikutnya",
+        "next_stage": "Tahap Berikutnya",
+        "finish": "Selesai",
+        "excellent": "Sempurna!",
+        "good": "Bagus!",
+        "keep_practicing": "Terus berlatih!",
+        "hint": "Petunjuk",
+        "settings": "Pengaturan",
+        "logout": "Keluar"
+    },
+    "feedback_templates": {
+        "perfect": "Sempurna! {detail}",
+        "excellent": "Sangat baik! {detail}",
+        "good": "Bagus! {detail}",
+        "needs_improvement": "Hampir benar. {suggestion}",
+        "incorrect": "Mari coba lagi. {suggestion}",
+        "grammar_error": "Kesalahan tata bahasa: {detail}",
+        "vocabulary_error": "Gunakan kata '{correct}' lebih tepat.",
+        "formality_error": "Tingkat kesopanan kurang sesuai. {suggestion}",
+        "particle_missing": "Jangan lupa partikel '{particle}'."
+    },
+    "error_types": {
+        "grammar": "Tata Bahasa",
+        "vocabulary": "Kosakata",
+        "formality": "Tingkat Kesopanan",
+        "pronunciation": "Pelafalan",
+        "particle": "Partikel",
+        "none": "Tidak Ada Kesalahan"
+    },
+    "indonesian_error_patterns": [
+        {
+            "pattern_id": "particle_omission",
+            "reason_id": "Bahasa Indonesia tidak memiliki partikel seperti 은/는/이/가/을/를",
+            "examples": [
+                {
+                    "wrong": "나 학교 가요",
+                    "correct": "나는 학교에 가요",
+                    "explanation_id": "Tambahkan partikel '는' setelah subjek dan '에' setelah lokasi"
+                },
+                {
+                    "wrong": "사과 좋아해요",
+                    "correct": "사과를 좋아해요",
+                    "explanation_id": "Objek memerlukan partikel '를'"
+                }
+            ]
+        },
+        {
+            "pattern_id": "honorific_confusion",
+            "reason_id": "Sistem kehormatan bahasa Korea berbeda dengan bahasa Indonesia",
+            "examples": [
+                {
+                    "wrong": "선생님이 왔어",
+                    "correct": "선생님이 오셨어요",
+                    "explanation_id": "Gunakan bentuk hormat '오시다' untuk guru"
+                },
+                {
+                    "wrong": "할머니가 먹어요",
+                    "correct": "할머니가 드세요",
+                    "explanation_id": "Gunakan kata kerja hormat '드시다' untuk kakek/nenek"
+                }
+            ]
+        },
+        {
+            "pattern_id": "tense_conjugation",
+            "reason_id": "Bahasa Indonesia tidak memiliki konjugasi waktu yang kompleks",
+            "examples": [
+                {
+                    "wrong": "어제 먹어요",
+                    "correct": "어제 먹었어요",
+                    "explanation_id": "Gunakan bentuk lampau '먹었다' untuk 'kemarin'"
+                },
+                {
+                    "wrong": "내일 갔어요",
+                    "correct": "내일 갈 거예요",
+                    "explanation_id": "Gunakan bentuk masa depan '갈 거다' untuk 'besok'"
+                }
+            ]
+        },
+        {
+            "pattern_id": "topic_subject_confusion",
+            "reason_id": "Perbedaan antara topik (은/는) dan subjek (이/가) sulit dipahami",
+            "examples": [
+                {
+                    "wrong": "저가 학생입니다",
+                    "correct": "저는 학생입니다",
+                    "explanation_id": "Saat memperkenalkan diri, gunakan partikel topik '는'"
+                }
+            ]
+        },
+        {
+            "pattern_id": "location_particle",
+            "reason_id": "Partikel lokasi 에/에서/로 tidak ada dalam bahasa Indonesia",
+            "examples": [
+                {
+                    "wrong": "학교 가요",
+                    "correct": "학교에 가요",
+                    "explanation_id": "Tujuan memerlukan partikel '에'"
+                },
+                {
+                    "wrong": "카페 공부해요",
+                    "correct": "카페에서 공부해요",
+                    "explanation_id": "Lokasi aktivitas memerlukan partikel '에서'"
+                }
+            ]
+        }
+    ],
+    "lesson_descriptions": {
+        "les_greeting_001": "Pelajaran ini mengajarkan cara menyapa dalam bahasa Korea dengan berbagai tingkat kesopanan.",
+        "les_selfintro_002": "Pelajari cara memperkenalkan diri, termasuk nama, negara asal, pekerjaan, dan hobi Anda.",
+        "les_shopping_003": "Belajar berbelanja di Korea: menanyakan harga, memilih ukuran dan warna, serta membayar.",
+        "les_restaurant_004": "Ungkapan penting untuk memesan makanan, meminta sesuatu, dan membayar di restoran.",
+        "les_transport_005": "Cara menggunakan transportasi umum: menanyakan arah, naik taksi, dan menggunakan subway.",
+        "les_bank_006": "Ungkapan dasar untuk urusan perbankan: membuka rekening, transfer, dan transaksi.",
+        "les_hospital_007": "Cara menjelaskan gejala penyakit dan berkomunikasi dengan dokter atau apotek.",
+        "les_emotions_008": "Mengekspresikan berbagai emosi: kebahagiaan, kesedihan, maaf, dan terima kasih.",
+        "les_weather_009": "Berbicara tentang cuaca dan musim dalam bahasa Korea.",
+        "les_phone_010": "Ungkapan dasar untuk percakapan telepon dan meninggalkan pesan.",
+        "les_business_011": "Bahasa formal untuk pertemuan bisnis, presentasi, dan diskusi profesional.",
+        "les_news_012": "Memahami berita dan mendiskusikan isu terkini dalam bahasa Korea.",
+        "les_culture_013": "Belajar tentang budaya Korea: tradisi, sejarah, dan budaya modern.",
+        "les_advanced_014": "Ungkapan idiomatik dan tata bahasa tingkat lanjut dalam bahasa Korea.",
+        "les_debate_015": "Keterampilan untuk berdebat, berargumen, dan menyampaikan pendapat secara logis."
+    },
+    "encouragement_messages": [
+        "Sangat bagus! Terus semangat!",
+        "Kamu belajar dengan cepat!",
+        "Pelafalan yang sempurna!",
+        "Hampir sempurna! Sedikit lagi!",
+        "Jangan menyerah, kamu pasti bisa!",
+        "Kerja bagus! Mari lanjutkan!",
+        "Wow, kemajuanmu luar biasa!",
+        "Kamu semakin pintar!",
+        "Bagus sekali! 화이팅! (Hwaiting!)",
+        "Terus seperti ini, kamu hebat!"
+    ],
+    "common_words_id_ko": {
+        "halo": "안녕하세요",
+        "terima_kasih": "감사합니다",
+        "maaf": "죄송합니다",
+        "ya": "네",
+        "tidak": "아니요",
+        "selamat_tinggal": "안녕히 가세요",
+        "selamat_pagi": "좋은 아침이에요",
+        "selamat_malam": "안녕히 주무세요",
+        "berapa": "얼마",
+        "dimana": "어디",
+        "kapan": "언제",
+        "siapa": "누구",
+        "apa": "무엇",
+        "bagaimana": "어떻게",
+        "mengapa": "왜"
+    },
+    "grammar_explanations": {
+        "particles_subject": {
+            "title_id": "Partikel Subjek (이/가)",
+            "explanation_id": "Partikel '이' digunakan setelah konsonan, '가' setelah vokal. Menandai subjek kalimat.",
+            "examples": [
+                "책이 있어요 (Ada buku)",
+                "물가 있어요 (Ada air)"
+            ]
+        },
+        "particles_topic": {
+            "title_id": "Partikel Topik (은/는)",
+            "explanation_id": "Partikel '은' setelah konsonan, '는' setelah vokal. Menandai topik pembicaraan.",
+            "examples": [
+                "저는 학생입니다 (Saya adalah pelajar)",
+                "책은 좋아요 (Bukunya bagus)"
+            ]
+        },
+        "particles_object": {
+            "title_id": "Partikel Objek (을/를)",
+            "explanation_id": "Partikel '을' setelah konsonan, '를' setelah vokal. Menandai objek langsung.",
+            "examples": [
+                "밥을 먹어요 (Makan nasi)",
+                "물을 마셔요 (Minum air)"
+            ]
+        },
+        "honorifics": {
+            "title_id": "Bentuk Hormat (존댓말)",
+            "explanation_id": "Bahasa Korea memiliki sistem kehormatan yang kompleks. Gunakan bentuk hormat untuk orang yang lebih tua atau dalam situasi formal.",
+            "examples": [
+                "오시다 (datang-hormat)",
+                "드시다 (makan-hormat)",
+                "계시다 (ada-hormat)"
+            ]
+        }
+    }
+}

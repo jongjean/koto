@@ -115,12 +115,32 @@ class GeminiEvaluator(EvaluationProvider):
         Gemini용 평가 프롬프트 생성
         """
         
+        # 인도네시아어 학습자 특화 안내
+        indonesian_specific = ""
+        if feedback_lang == "Bahasa Indonesia":
+            indonesian_specific = """
+**IMPORTANT - Indonesian Learner Specific:**
+Common mistakes for Indonesian speakers learning Korean:
+1. **Particle Omission**: Indonesian doesn't have particles (은/는/이/가/을/를)
+   - Wrong: "나 학교 가요" → Correct: "나는 학교에 가요"
+2. **Honorifics**: Korean honorific system is more complex
+   - Wrong: "선생님이 왔어" → Correct: "선생님이 오셨어요"
+3. **Tense**: Indonesian has simpler verb conjugation
+   - Wrong: "어제 먹어요" → Correct: "어제 먹었어요"
+4. **Location Particles**: 에/에서/로 distinction
+   - Wrong: "학교 공부해요" → Correct: "학교에서 공부해요"
+
+Focus on these common errors when evaluating.
+"""
+        
         prompt = f"""You are a Korean language tutor evaluating a learner's response.
 
 **Context:**
 - Expected Pattern: {expected_pattern}
 - Difficulty Level: {context.get('difficulty', 1)}/5
 - Feedback Language: {feedback_lang}
+
+{indonesian_specific}
 
 **User Response:** 
 {user_text}
@@ -138,7 +158,7 @@ Evaluate the Korean response and provide detailed feedback.
 ```json
 {{
   "score": 85,
-  "primary_error_type": "grammar|vocabulary|formality|pronunciation|none",
+  "primary_error_type": "grammar|vocabulary|formality|pronunciation|particle|none",
   "errors": [
     {{
       "type": "grammar",
