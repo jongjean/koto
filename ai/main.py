@@ -34,13 +34,18 @@ async def health_check():
 async def root():
     return {
         "message": "Korean Together AI Service",
+        "version": "0.1.0",
         "endpoints": {
             "health": "/health",
-            "stt": "/api/v1/stt (coming soon)",
+            "evaluate": "/api/v1/evaluate",
             "tts": "/api/v1/tts (coming soon)",
-            "evaluate": "/api/v1/evaluate (coming soon)"
+            "stt": "/api/v1/stt (coming soon)"
         }
     }
+
+# Routes
+from routes.evaluation import router as eval_router
+app.include_router(eval_router)
 
 if __name__ == "__main__":
     import uvicorn
