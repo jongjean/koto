@@ -20,7 +20,7 @@ class GeminiEvaluator(EvaluationProvider):
         genai.configure(api_key=api_key)
         
         # 모델 설정
-        self.model_id = self.config.get("model_id", "gemini-1.5-pro")
+        self.model_id = self.config.get("model_id", "gemini-pro-latest")
         self.model = genai.GenerativeModel(self.model_id)
         
         # 타임아웃 설정 (AI_POLICY.md 기준)
