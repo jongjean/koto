@@ -1,0 +1,21 @@
+# Korean Together API
+koto.uconcreative.ddns.net {
+    # API 서버
+    reverse_proxy localhost:5000
+    
+    # 로그
+    log {
+        output file /var/log/caddy/koto-api.log
+    }
+}
+
+# Korean Together AI Service
+koto-ai.uconcreative.ddns.net {
+    # AI 서비스
+    reverse_proxy localhost:8000
+    
+    # 로그
+    log {
+        output file /var/log/caddy/koto-ai.log
+    }
+}
