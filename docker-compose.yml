@@ -1,0 +1,224 @@
+version: '3.8'
+
+# Korean Together - Optimized MVP Architecture (v2.0)
+# 설계 개선: 모듈러 모놀리스, Docker 표준화, 보안 강화
+
+services:
+  # =============================================================================
+  # KOTO Application (Node.js API + Python AI Service 통합)
+  # =============================================================================
+  koto-app:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.app
+      target: production
+    image: koto-app:${VERSION:-0.1.0-alpha}
+    container_name: koto-app
+    restart: unless-stopped
+    environment:
+      # Environment
+      NODE_ENV: ${NODE_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+
+      # Database
+      DATABASE_URL: postgresql://${DB_USER:-koto_user}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-koto}
+      
+      # Redis
+      REDIS_URL: redis://redis:6379
+      
+      # MinIO (Internal only)
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: 9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-koto_minio}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_USE_SSL: "false"
+      
+      # AI Service (Internal)
+      AI_SERVICE_URL: http://localhost:8000
+      
+      # External APIs
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GOOGLE_APPLICATION_CREDENTIALS: /app/secrets/gcp-sa.json
+      
+      # AI Providers (v0: 외부 API만)
+      STT_PROVIDER: ${STT_PROVIDER:-google}
+      TTS_PROVIDER: ${TTS_PROVIDER:-google}
+      EVAL_PROVIDER: ${EVAL_PROVIDER:-gemini}
+      
+      # Security
+      JWT_SECRET: ${JWT_SECRET}
+      SESSION_SECRET: ${SESSION_SECRET}
+      
+      # Features (v0 기준)
+      ENABLE_VOICE_INPUT: "false"   # v1에서 true
+      ENABLE_GPU_MODELS: "false"    # v2에서 true
+      
+    ports:
+      - "127.0.0.1:5000:5000"   # API Server (Caddy를 통해 접근)
+      
+    volumes:
+      # Secrets (read-only)
+      - ./secrets:/app/secrets:ro
+      
+      # Logs (persistent)
+      - app-logs:/app/logs
+      
+      # Optional: 개발 시 코드 마운트
+      # - ./api:/app/api
+      # - ./ai:/app/ai
+      
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_started
+        
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      
+    networks:
+      - koto-network
+      
+    # Resource limits (v0 기준, GPU 없음)
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  # =============================================================================
+  # PostgreSQL Database (전용 컨테이너)
+  # =============================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: koto-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-koto_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-koto}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+      
+    ports:
+      # 기존 5432 포트와 충돌 방지
+      - "127.0.0.1:5433:5432"
+      
+    volumes:
+      # 데이터 영구 저장
+      - /data/db/koto-postgres:/var/lib/postgresql/data
+      
+      # 초기화 SQL (선택)
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-koto_user} -d ${DB_NAME:-koto}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+      
+    networks:
+      - koto-network
+      
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+
+  # =============================================================================
+  # Redis Cache & Session Store
+  # =============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: koto-redis
+    restart: unless-stopped
+    command: 
+      - redis-server
+      - --appendonly yes
+      - --appendfsync everysec
+      - --maxmemory 512mb
+      - --maxmemory-policy allkeys-lru
+      
+    ports:
+      # 기존 6379 포트와 충돌 방지
+      - "127.0.0.1:6380:6379"
+      
+    volumes:
+      - /data/db/koto-redis:/data
+      
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      
+    networks:
+      - koto-network
+      
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # =============================================================================
+  # MinIO Object Storage (내부 전용, presigned URL 방식)
+  # =============================================================================
+  minio:
+    image: minio/minio:latest
+    container_name: koto-minio
+    restart: unless-stopped
+    command: server --console-address ":9001" /data
+    
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-koto_minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      MINIO_BROWSER: ${MINIO_BROWSER:-on}
+      
+    ports:
+      # ⚠️ LOCALHOST ONLY (Public 노출 금지)
+      - "127.0.0.1:9002:9000"   # API (내부만, presigned URL 사용)
+      - "127.0.0.1:9003:9001"   # Console (관리자 전용)
+      
+    volumes:
+      - /data/db/koto-minio:/data
+      
+    networks:
+      - koto-network
+      
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  app-logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/db/koto-logs
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  koto-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.10.0/24

@@ -59,8 +59,8 @@ app.get('/health', (req, res) => {
     });
 });
 
-// API routes (will be added)
-// app.use('/api/v1/sessions', require('./routes/sessions'));
+// API routes
+app.use('/api/v1/sessions', require('./routes/sessions'));
 // app.use('/api/v1/lessons', require('./routes/lessons'));
 // app.use('/api/v1/audio', require('./routes/audio'));
 
