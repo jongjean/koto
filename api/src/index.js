@@ -52,7 +52,7 @@ app.use(express.static('public'));
 // =============================================================================
 
 // Health check
-app.get('/health', (req, res) => {
+app.get(['/health', '/api/health'], (req, res) => {
     res.json({
         status: 'OK',
         service: 'KOTO API',

@@ -1,361 +1,886 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Korean Together - 모바일 테스트</title>
+    <title>Global Together</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f0f2f5;
+            margin: 0;
             padding: 20px;
             color: #333;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
-        .header {
+        /* Language Selection */
+        #lang-screen {
             text-align: center;
-            color: white;
-            margin-bottom: 30px;
+            padding-top: 20px;
         }
 
-        .header h1 {
-            font-size: 28px;
+        .lang-group {
+            margin-bottom: 25px;
+            text-align: left;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .lang-group h3 {
+            margin-top: 0;
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .radio-item {
+            position: relative;
+        }
+
+        .radio-item input {
+            display: none;
+        }
+
+        .radio-item label {
+            display: block;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .radio-item input:checked+label {
+            border-color: #1a73e8;
+            background: #e8f0fe;
+            color: #1a73e8;
+            font-weight: bold;
+        }
+
+        .flag {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #btn-start {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        #btn-start:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .cat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px 10px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, background 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .cat-card:active {
+            transform: scale(0.95);
+            background: #f5f5f5;
+        }
+
+        .cat-card:hover {
+            border-color: #1a73e8;
+        }
+
+        .cat-icon {
+            font-size: 40px;
             margin-bottom: 10px;
         }
 
-        .header p {
+        .cat-label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Main App */
+        #app-screen {
+            display: none;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #666;
             font-size: 14px;
-            opacity: 0.9;
+            cursor: pointer;
+            margin-bottom: 10px;
         }
 
         .card {
             background: white;
-            border-radius: 15px;
+            border-radius: 16px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        .card h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #667eea;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
+        h1 {
+            font-size: 22px;
+            text-align: center;
+            color: #1a73e8;
+            margin: 0 0 20px 0;
         }
 
         label {
             display: block;
-            font-size: 14px;
-            margin-bottom: 5px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
             font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 8px;
+            margin-bottom: 8px;
             font-size: 14px;
-            display: none;
+            color: #555;
         }
 
-        .result.show {
-            display: block;
-        }
-
-        .score {
-            font-size: 48px;
-            font-weight: bold;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .score.perfect {
-            color: #4CAF50;
-        }
-
-        .score.good {
-            color: #FFA726;
-        }
-
-        .feedback {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            line-height: 1.6;
-        }
-
-        .error {
-            background: #ffebee;
-            color: #c62828;
+        select,
+        input,
+        button.action-btn {
+            width: 100%;
             padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
             border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .highlight-box {
+            background: #e3f2fd;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #bbdefb;
+        }
+
+        .target-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1565c0;
+            margin: 0;
+            word-break: keep-all;
+        }
+
+        .native-text {
+            font-size: 16px;
+            color: #666;
             margin-top: 10px;
         }
 
-        .loading {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .status {
+        .row {
             display: flex;
-            justify-content: space-around;
+            gap: 8px;
+        }
+
+        #mic-btn {
+            width: 50px;
+            flex-shrink: 0;
+            background: #f1f3f4;
+            border: 1px solid #dadce0;
+            font-size: 20px;
+            border-radius: 8px;
+        }
+
+        #mic-btn.listening {
+            background: #ea4335;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        .play-btn {
+            width: 50px;
+            flex-shrink: 0;
+            background: #fb8c00;
+            color: white;
+            font-size: 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .action-btn {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+
+        /* Result Section */
+        .result {
+            background: #e8f0fe;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+        }
+
+        .score-wrap {
             margin-bottom: 20px;
         }
 
-        .status-item {
-            text-align: center;
+        .score-val {
+            font-size: 50px;
+            font-weight: bold;
+            display: block;
+            line-height: 1;
+            margin-bottom: 5px;
         }
 
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
+        .score-msg {
+            font-size: 18px;
+            font-weight: bold;
         }
 
-        .status-dot.online {
-            background: #4CAF50;
+        /* Correct Answer Box (Highlighted) */
+        .correct-box {
+            background: #fff;
+            border: 2px solid #4CAF50;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .status-dot.offline {
-            background: #f44336;
+        .correct-label {
+            color: #2e7d32;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .correct-text {
+            font-size: 22px;
+            color: #1b5e20;
+            font-weight: bold;
+            word-break: keep-all;
+        }
+
+        /* Hidden Feedback Section */
+        .feedback-box {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            text-align: left;
+            font-size: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .feedback-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .audio-sm-btn {
+            background: none;
+            border: 1px solid #1a73e8;
+            color: #1a73e8;
+            padding: 4px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 16px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        /* New Buttons */
+        .big-btn {
+            background: #e8f0fe;
+            border: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            font-size: 15px;
+        }
+
+        .toggle-feedback-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #debug-console {
+            background: #202124;
+            color: #5bb974;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 10px;
+            height: 80px;
+            overflow-y: scroll;
+            margin-top: 30px;
+            opacity: 0.8;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🇰🇷 Korean Together</h1>
-            <p>모바일 테스트 인터페이스</p>
-        </div>
+        <!-- 1. Language Selection -->
+        <div id="lang-screen">
+            <h1>Global Together 🌏</h1>
+            <p style="color:#666; margin-bottom:30px;">Select Language</p>
 
-        <!-- 서버 상태 -->
-        <div class="card">
-            <h2>서버 상태</h2>
-            <div class="status">
-                <div class="status-item">
-                    <div>
-                        <span class="status-dot" id="api-status"></span>
-                        <span>API</span>
+            <div class="lang-group">
+                <h3>🗣️ I speak (Native)</h3>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="native" id="n-ko" value="ko"
+                            onclick="updateStartConfig()"><label for="n-ko"><span class="flag">🇰🇷</span>Korean</label>
+                    </div>
+                    <div class="radio-item"><input type="radio" name="native" id="n-en" value="en"
+                            onclick="updateStartConfig()"><label for="n-en"><span
+                                class="flag">🇺🇸</span>English</label></div>
+                    <div class="radio-item"><input type="radio" name="native" id="n-id" value="id"
+                            onclick="updateStartConfig()"><label for="n-id"><span
+                                class="flag">🇮🇩</span>Indonesia</label>
                     </div>
                 </div>
-                <div class="status-item">
-                    <div>
-                        <span class="status-dot" id="ai-status"></span>
-                        <span>AI</span>
+            </div>
+
+            <div class="lang-group">
+                <h3>🎓 I want to learn (Target)</h3>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="target" id="t-ko" value="ko"
+                            onclick="updateStartConfig()"><label for="t-ko"><span class="flag">🇰🇷</span>Korean</label>
+                    </div>
+                    <div class="radio-item"><input type="radio" name="target" id="t-en" value="en"
+                            onclick="updateStartConfig()"><label for="t-en"><span
+                                class="flag">🇺🇸</span>English</label></div>
+                    <div class="radio-item"><input type="radio" name="target" id="t-id" value="id"
+                            onclick="updateStartConfig()"><label for="t-id"><span
+                                class="flag">🇮🇩</span>Indonesia</label>
                     </div>
                 </div>
             </div>
+
+            <button id="btn-start" onclick="startApp()" disabled>Start Learning</button>
         </div>
 
-        <!-- 테스트 폼 -->
-        <div class="card">
-            <h2>한국어 평가 테스트</h2>
+        <!-- 2. Category Selection (New) -->
+        <div id="category-screen" style="display:none; text-align:center;">
+            <button class="back-btn" onclick="location.reload()">← Language</button>
+            <h1 id="cat-title">Select Situation</h1>
+            <div id="cat-grid" class="category-grid">
+                <!-- Generated by JS -->
+            </div>
+        </div>
 
-            <div class="form-group">
-                <label>언어 선택</label>
-                <select id="lang-select">
-                    <option value="ko-en">English (영어)</option>
-                    <option value="ko-id">Bahasa Indonesia (인도네시아어)</option>
-                </select>
+        <!-- 3. Main App -->
+        <div id="app-screen">
+            <button class="back-btn" onclick="backToCategory()">← Back</button>
+            <h1 id="app-title">Global Together</h1>
+
+            <div class="card">
+                <label id="lbl-select">1. Select</label>
+                <div class="row">
+                    <select id="question-select" onchange="onQuestionChange()"></select>
+                    <button class="play-btn" onclick="playQuestion()">🔊</button>
+                </div>
+
+                <div class="highlight-box">
+                    <h2 id="target-display" class="target-text"></h2>
+                    <p id="native-display" class="native-text"></p>
+                </div>
+
+                <label id="lbl-input">2. Speak</label>
+                <div class="row">
+                    <input type="text" id="user-input" placeholder="...">
+                    <button id="mic-btn" onclick="toggleSTT()">🎤</button>
+                </div>
+
+                <button id="btn-eval" class="action-btn" onclick="evaluateAnswer()">Check Pronunciation</button>
             </div>
 
-            <div class="form-group">
-                <label>문제 선택</label>
-                <select id="question-select">
-                    <option value='{"text":"안녕하세요","expected":"안녕하세요","difficulty":1}'>인사하기: 안녕하세요</option>
-                    <option value='{"text":"반갑습니다","expected":"반갑습니다","difficulty":1}'>인사하기: 반갑습니다</option>
-                    <option value='{"text":"저는 학생입니다","expected":"저는 학생입니다","difficulty":2}'>자기소개: 저는 학생입니다</option>
-                    <option value='{"text":"이거 얼마예요?","expected":"이거 얼마예요?","difficulty":1}'>쇼핑: 이거 얼마예요?</option>
-                </select>
-            </div>
+            <div id="result-area" class="result"></div>
 
-            <div class="form-group">
-                <label>당신의 답변 (한국어로 입력하세요)</label>
-                <input type="text" id="user-input" placeholder="예: 안녕하세요">
-            </div>
-
-            <button onclick="evaluate()">평가하기</button>
-
-            <div id="result" class="result"></div>
+            <div id="debug-console">Debug Log:<br></div>
         </div>
     </div>
 
     <script>
-        // API 서버 주소 (상대 경로 사용)
         const API_BASE = window.location.origin;
-        const AI_BASE = window.location.origin;
+        let nativeLang = '';
+        let targetLang = '';
 
-        // 서버 상태 확인
-        async function checkServers() {
-            try {
-                const apiResp = await fetch(`${API_BASE}/health`);
-                document.getElementById('api-status').className = 'status-dot online';
-            } catch (e) {
-                document.getElementById('api-status').className = 'status-dot offline';
+        const LANG_META = {
+            'ko': { name: 'Korean', flag: '🇰🇷', tts: 'ko-KR' },
+            'en': { name: 'English', flag: '🇺🇸', tts: 'en-US' },
+            'id': { name: 'Indonesian', flag: '🇮🇩', tts: 'id-ID' }
+        };
+
+        const logArea = document.getElementById('debug-console');
+        function log(msg) {
+            const time = new Date().toLocaleTimeString();
+            logArea.innerHTML += `[${time}] ${msg}<br>`;
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+
+        const UI_TEXT = {
+            'ko': {
+                title: "함께 배우기", select: "학습할 문장 선택", input: "따라 말하기", evalBtn: "발음 확인하기",
+                placeholder: "마이크 버튼을 누르세요", listening: "듣고 있어요...",
+                feedback: "AI 조언", correction: "정답 발음", listen: "듣기", error: "오류",
+                why: "왜 틀렸나요?",
+                msgPerfect: "완벽해요! 🎉", msgGood: "좋아요! 👍", msgBad: "다시 해보세요 💪",
+                aiName: "AI 선생님 🧑‍🏫"
+            },
+            'en': {
+                title: "Learn Together", select: "Select Sentence", input: "Speak", evalBtn: "Check Pronunciation",
+                placeholder: "Press mic to speak", listening: "Listening...",
+                feedback: "AI Advice", correction: "Correct Answer", listen: "Listen", error: "Error",
+                why: "Why is this wrong?",
+                msgPerfect: "Perfect! 🎉", msgGood: "Good Job! 👍", msgBad: "Try Again 💪",
+                aiName: "AI Tutor 🧑‍🏫"
+            },
+            'id': {
+                title: "Belajar Bersama", select: "Pilih Kalimat", input: "Bicara", evalBtn: "Cek Pengucapan",
+                placeholder: "Tekan mikrofon", listening: "Mendengarkan...",
+                feedback: "Saran AI", correction: "Jawaban Benar", listen: "Dengar", error: "Error",
+                why: "Kenapa salah?",
+                msgPerfect: "Sempurna! 🎉", msgGood: "Bagus! 👍", msgBad: "Coba Lagi 💪",
+                aiName: "Guru AI 🧑‍🏫"
             }
+        };
 
-            try {
-                const aiResp = await fetch(`${AI_BASE}/health`);
-                document.getElementById('ai-status').className = 'status-dot online';
-            } catch (e) {
-                document.getElementById('ai-status').className = 'status-dot offline';
+        const QUESTIONS = [
+            // 1. 학교에서 (School)
+            { category: "School", ko: "선생님, 질문 있어요.", en: "Teacher, I have a question.", id: "Guru, saya ada pertanyaan.", difficulty: 1 },
+            { category: "School", ko: "다시 한번 설명해 주세요.", en: "Please explain it again.", id: "Tolong jelaskan sekali lagi.", difficulty: 2 },
+            { category: "School", ko: "화장실 다녀와도 될까요?", en: "May I go to the bathroom?", id: "Bolehkah saya pergi ke toilet?", difficulty: 1 },
+            { category: "School", ko: "숙제는 언제까지인가요?", en: "When is the homework due?", id: "Kapan PR harus dikumpulkan?", difficulty: 2 },
+            { category: "School", ko: "책을 빌리고 싶어요.", en: "I want to borrow a book.", id: "Saya ingin meminjam buku.", difficulty: 1 },
+            { category: "School", ko: "한국어를 배우고 싶어요.", en: "I want to learn Korean.", id: "Saya ingin belajar bahasa Korea.", difficulty: 1 },
+            { category: "School", ko: "천천히 말해 주세요.", en: "Please speak slowly.", id: "Tolong bicara pelan-pelan.", difficulty: 1 },
+            { category: "School", ko: "이거 무슨 뜻이에요?", en: "What does this mean?", id: "Apa artinya ini?", difficulty: 1 },
+            { category: "School", ko: "같이 점심 먹을래요?", en: "Shall we have lunch together?", id: "Mau makan siang bersama?", difficulty: 2 },
+            { category: "School", ko: "내일 학교에서 봐요.", en: "See you at school tomorrow.", id: "Sampai jumpa di sekolah besok.", difficulty: 1 },
+
+            // 2. 여행에서 (Travel) - 숙소 및 관광
+            { category: "Travel", ko: "예약 확인해 주세요.", en: "I have a reservation.", id: "Saya sudah reservasi.", difficulty: 1 },
+            { category: "Travel", ko: "빈 방 있나요?", en: "Do you have a vacant room?", id: "Apakah ada kamar kosong?", difficulty: 1 },
+            { category: "Travel", ko: "조식은 몇 시인가요?", en: "What time is breakfast?", id: "Jam berapa sarapan?", difficulty: 1 },
+            { category: "Travel", ko: "와이파이 비밀번호가 뭐예요?", en: "What is the WiFi password?", id: "Apa kata sandi WiFi-nya?", difficulty: 2 },
+            { category: "Travel", ko: "수건 좀 더 주시겠어요?", en: "Can I have more towels?", id: "Bisakah saya minta handuk lagi?", difficulty: 2 },
+            { category: "Travel", ko: "짐을 맡겨도 될까요?", en: "Can I leave my luggage?", id: "Bolehkah saya menitipkan barang?", difficulty: 2 },
+            { category: "Travel", ko: "여기서 사진 좀 찍어주세요.", en: "Please take a picture here.", id: "Tolong ambilkan foto di sini.", difficulty: 1 },
+            { category: "Travel", ko: "입장료는 얼마예요?", en: "How much is the admission fee?", id: "Berapa harga tiket masuknya?", difficulty: 2 },
+            { category: "Travel", ko: "근처에 관광지가 있나요?", en: "Is there a tourist spot nearby?", id: "Apakah ada tempat wisata di dekat sini?", difficulty: 2 },
+            { category: "Travel", ko: "택시를 불러주세요.", en: "Please call a taxi.", id: "Tolong panggilkan taksi.", difficulty: 1 },
+
+            // 6. 공항에서 (Airport) - NEW
+            { category: "Airport", ko: "체크인 부탁합니다.", en: "Check-in, please.", id: "Tolong check-in.", difficulty: 1 },
+            { category: "Airport", ko: "여권을 보여주세요.", en: "Please show me your passport.", id: "Tolong tunjukkan paspor Anda.", difficulty: 1 },
+            { category: "Airport", ko: "창가 쪽 좌석으로 주세요.", en: "Window seat, please.", id: "Tolong kursi dekat jendela.", difficulty: 2 },
+            { category: "Airport", ko: "수하물은 어디서 찾나요?", en: "Where can I claim my baggage?", id: "Di mana saya bisa mengambil bagasi?", difficulty: 2 },
+            { category: "Airport", ko: "비행기가 지연되었나요?", en: "Is the flight delayed?", id: "Apakah penerbangannya ditunda?", difficulty: 2 },
+            { category: "Airport", ko: "탑승 게이트는 어디예요?", en: "Where is the boarding gate?", id: "Di mana gerbang keberangkatannya?", difficulty: 2 },
+            { category: "Airport", ko: "환전을 하고 싶어요.", en: "I want to exchange money.", id: "Saya ingin menukar uang.", difficulty: 2 },
+            { category: "Airport", ko: "면세점은 어디에 있나요?", en: "Where is the duty-free shop?", id: "Di mana toko bebas bea?", difficulty: 2 },
+            { category: "Airport", ko: "물 한 잔 주세요.", en: "Can I have some water?", id: "Bisa minta air?", difficulty: 1 },
+            { category: "Airport", ko: "도착 시간이 언제예요?", en: "When is the arrival time?", id: "Kapan waktu kedatangannya?", difficulty: 2 },
+
+            // 3. 병원에서 (Hospital)
+            { category: "Hospital", ko: "머리가 아파요.", en: "I have a headache.", id: "Sakit kepala.", difficulty: 1 },
+            { category: "Hospital", ko: "열이 나요.", en: "I have a fever.", id: "Saya demam.", difficulty: 1 },
+            { category: "Hospital", ko: "배가 너무 아파요.", en: "My stomach hurts so much.", id: "Perut saya sakit sekali.", difficulty: 2 },
+            { category: "Hospital", ko: "의사 선생님을 보고 싶어요.", en: "I want to see a doctor.", id: "Saya ingin bertemu dokter.", difficulty: 2 },
+            { category: "Hospital", ko: "약국은 어디에 있나요?", en: "Where is the pharmacy?", id: "Di mana apotek?", difficulty: 1 },
+            { category: "Hospital", ko: "감기에 걸렸어요.", en: "I caught a cold.", id: "Saya masuk angin.", difficulty: 1 },
+            { category: "Hospital", ko: "언제부터 아팠나요?", en: "Since when have you been sick?", id: "Sejak kapan kamu sakit?", difficulty: 2 },
+            { category: "Hospital", ko: "이 약을 드세요.", en: "Please take this medicine.", id: "Silakan minum obat ini.", difficulty: 1 },
+            { category: "Hospital", ko: "응급실로 가주세요.", en: "Please go to the emergency room.", id: "Tolong ke ruang gawat darurat.", difficulty: 3 },
+            { category: "Hospital", ko: "푹 쉬세요.", en: "Get some rest.", id: "Istirahatlah yang cukup.", difficulty: 1 },
+
+            // 4. 시장에서 (Market)
+            { category: "Market", ko: "이거 얼마예요?", en: "How much is this?", id: "Berapa harganya?", difficulty: 1 },
+            { category: "Market", ko: "너무 비싸요.", en: "It's too expensive.", id: "Terlalu mahal.", difficulty: 1 },
+            { category: "Market", ko: "깎아주세요.", en: "Please give me a discount.", id: "Tolong berikan diskon.", difficulty: 2 },
+            { category: "Market", ko: "신선한 과일 있나요?", en: "Do you have fresh fruit?", id: "Apakah ada buah segar?", difficulty: 1 },
+            { category: "Market", ko: "이것 좀 보여주세요.", en: "Please show me this.", id: "Tolong tunjukkan ini.", difficulty: 1 },
+            { category: "Market", ko: "봉투 주세요.", en: "Please give me a bag.", id: "Tolong beri saya kantong.", difficulty: 1 },
+            { category: "Market", ko: "카드로 계산되나요?", en: "Can I pay by card?", id: "Bisa bayar pakai kartu?", difficulty: 2 },
+            { category: "Market", ko: "다른 색깔 있나요?", en: "Do you have other colors?", id: "Apakah ada warna lain?", difficulty: 1 },
+            { category: "Market", ko: "입어봐도 되나요?", en: "Can I try this on?", id: "Boleh saya coba ini?", difficulty: 1 },
+            { category: "Market", ko: "또 올게요.", en: "I will come again.", id: "Saya akan datang lagi.", difficulty: 1 },
+
+            // 5. 식당에서 (Restaurant)
+            { category: "Restaurant", ko: "메뉴판 주세요.", en: "Please give me the menu.", id: "Tolong berikan menunya.", difficulty: 1 },
+            { category: "Restaurant", ko: "주문하시겠어요?", en: "Are you ready to order?", id: "Apakah Anda siap memesan?", difficulty: 2 },
+            { category: "Restaurant", ko: "물 좀 주세요.", en: "Please give me some water.", id: "Tolong minta air.", difficulty: 1 },
+            { category: "Restaurant", ko: "이거 안 매운가요?", en: "Is this not spicy?", id: "Apakah ini tidak pedas?", difficulty: 2 },
+            { category: "Restaurant", ko: "추천해 주세요.", en: "Please recommend something.", id: "Tolong rekomendasikan sesuatu.", difficulty: 2 },
+            { category: "Restaurant", ko: "계산서 주세요.", en: "Please give me the bill.", id: "Tolong minta tagihannya.", difficulty: 1 },
+            { category: "Restaurant", ko: "정말 맛있어요.", en: "It is really delicious.", id: "Ini enak sekali.", difficulty: 1 },
+            { category: "Restaurant", ko: "포장해 주세요.", en: "Please wrap this up.", id: "Tolong dibungkus.", difficulty: 2 },
+            { category: "Restaurant", ko: "예약 했나요?", en: "Did you make a reservation?", id: "Apakah Anda sudah reservasi?", difficulty: 2 },
+            { category: "Restaurant", ko: "잘 먹었습니다.", en: "Thank you for the meal.", id: "Terima kasih atas makanannya.", difficulty: 1 }
+        ];
+
+        const CATEGORY_META = {
+            'School': { icon: '🏫', ko: '학교에서', en: 'At School', id: 'Di Sekolah' },
+            'Travel': { icon: '✈️', ko: '여행가서', en: 'Travel', id: 'Saat Traveling' },
+            'Airport': { icon: '🛫', ko: '공항에서', en: 'Airport', id: 'Di Bandara' },
+            'Hospital': { icon: '🏥', ko: '병원에서', en: 'Hospital', id: 'Di Rumah Sakit' },
+            'Market': { icon: '🛒', ko: '시장에서', en: 'Market', id: 'Di Pasar' },
+            'Restaurant': { icon: '🍽️', ko: '식당에서', en: 'Restaurant', id: 'Di Restoran' }
+        };
+
+        function updateStartConfig() {
+            const n = document.querySelector('input[name="native"]:checked');
+            const t = document.querySelector('input[name="target"]:checked');
+            const btn = document.getElementById('btn-start');
+            if (n && t) {
+                if (n.value === t.value) {
+                    btn.innerText = "Select different languages";
+                    btn.disabled = true;
+                } else {
+                    btn.innerText = `Start Learning (${LANG_META[t.value].flag})`;
+                    btn.disabled = false;
+                }
             }
         }
 
-        // 초기 상태 확인
-        checkServers();
-        setInterval(checkServers, 5000);
+        function startApp() {
+            nativeLang = document.querySelector('input[name="native"]:checked').value;
+            targetLang = document.querySelector('input[name="target"]:checked').value;
 
-        // 평가 함수
-        async function evaluate() {
-            const userInput = document.getElementById('user-input').value.trim();
-            const langPack = document.getElementById('lang-select').value;
-            const questionData = JSON.parse(document.getElementById('question-select').value);
-            const resultDiv = document.getElementById('result');
+            document.getElementById('lang-screen').style.display = 'none';
+            document.getElementById('category-screen').style.display = 'block'; // 먼저 카테고리 화면 표시
 
-            if (!userInput) {
-                resultDiv.className = 'result show error';
-                resultDiv.innerHTML = '답변을 입력해주세요!';
-                return;
+            renderCategories();
+        }
+
+        function renderCategories() {
+            const grid = document.getElementById('cat-grid');
+            grid.innerHTML = '';
+
+            // 6개 카테고리
+            const cats = ['School', 'Airport', 'Travel', 'Hospital', 'Market', 'Restaurant'];
+
+            cats.forEach(cat => {
+                const meta = CATEGORY_META[cat];
+                const label = meta[nativeLang] || meta['en']; // 사용자 언어로 라벨 표시
+
+                const btn = document.createElement('div');
+                btn.className = 'cat-card';
+                btn.onclick = () => selectCategory(cat);
+                btn.innerHTML = `
+                    <div class="cat-icon">${meta.icon}</div>
+                    <div class="cat-label">${label}</div>
+                `;
+                grid.appendChild(btn);
+            });
+
+            // 제목 설정
+            const t = UI_TEXT[nativeLang] || UI_TEXT['en'];
+            const targetName = LANG_META[targetLang].name;
+            document.getElementById('cat-title').innerText = `${t.title} - ${targetName}`;
+        }
+
+        function backToCategory() {
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('category-screen').style.display = 'block';
+        }
+
+        let currentCategoryQuestions = [];
+
+        function selectCategory(cat) {
+            document.getElementById('category-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'block';
+
+            // Filter questions
+            currentCategoryQuestions = QUESTIONS.filter(q => q.category === cat);
+
+            const t = UI_TEXT[nativeLang] || UI_TEXT['en'];
+            const meta = CATEGORY_META[cat];
+            const catLabel = meta[nativeLang] || meta['en'];
+
+            document.getElementById('app-title').innerText = `${meta.icon} ${catLabel}`;
+
+            const select = document.getElementById('question-select');
+            select.innerHTML = '';
+
+            currentCategoryQuestions.forEach((q, idx) => {
+                const targetText = q[targetLang];
+                const nativeText = q[nativeLang];
+                const option = document.createElement('option');
+                option.value = idx;
+                option.text = `[Lev${q.difficulty}] ${targetText} (${nativeText})`;
+                select.appendChild(option);
+            });
+
+            onQuestionChange();
+        }
+
+        function onQuestionChange() {
+            const idx = document.getElementById('question-select').value;
+            if (idx === null || idx === undefined || !currentCategoryQuestions[idx]) return;
+
+            const q = currentCategoryQuestions[idx];
+            document.getElementById('target-display').innerText = q[targetLang];
+            document.getElementById('native-display').innerText = q[nativeLang];
+            document.getElementById('user-input').value = '';
+            document.getElementById('result-area').style.display = 'none';
+        }
+
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                const voices = window.speechSynthesis.getVoices();
+                log(`Voices loaded: ${voices.length}`);
+                // 한국어 음성 목록 출력 (디버깅용)
+                const koVoices = voices.filter(v => v.lang.includes('ko'));
+                if (koVoices.length > 0) {
+                    log(`🇰🇷 KO Voices: ${koVoices.map(v => v.name).join(', ')}`);
+                } else {
+                    log("⚠️ No Korean voices found!");
+                }
+            };
+        }
+
+        // --- Improved Speak Function ---
+        function playQuestion() {
+            const text = document.getElementById('target-display').innerText;
+            speak(text, LANG_META[targetLang].tts);
+        }
+
+        function speak(text, lang) {
+            if (!window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+
+            const cleanText = text.replace(/[\n\r]/g, ' ').trim();
+            if (!cleanText) return;
+
+            const u = new SpeechSynthesisUtterance(cleanText);
+            u.lang = lang || 'en-US';
+            u.rate = 1.0; // 속도 정규화
+
+            const voices = window.speechSynthesis.getVoices();
+            const langCode = u.lang.split('-')[0]; // 'ko', 'en'
+
+            let targetVoice = null;
+
+            if (langCode === 'ko') {
+                // 한국어: 구글(온라인) -> 구글(오프라인) -> 기타 순으로 강력하게 찾기
+                targetVoice = voices.find(v => v.name.includes('Google 한국어')) ||
+                    voices.find(v => v.name.includes('Google Korean')) ||
+                    voices.find(v => v.lang === 'ko-KR' && v.name.includes('Google')) ||
+                    voices.find(v => v.name.includes('Korean')) || // 일반 Korean
+                    voices.find(v => v.lang.includes('ko'));      // 최후의 수단
+            } else if (langCode === 'en') {
+                targetVoice = voices.find(v => v.name.includes('Google US')) ||
+                    voices.find(v => v.name.includes('Google')) ||
+                    voices.filter(v => v.lang.startsWith('en'))[0];
+            } else if (langCode === 'id') {
+                targetVoice = voices.find(v => v.name.includes('Indonesia')) ||
+                    voices.filter(v => v.lang.startsWith('id'))[0];
             }
 
-            // 로딩 표시
-            resultDiv.className = 'result show';
-            resultDiv.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p style="margin-top: 10px;">평가 중...</p>
-                </div>
-            `;
+            if (targetVoice) {
+                u.voice = targetVoice;
+                log(`🔊 Speaking with: ${targetVoice.name}`);
+            } else {
+                log(`⚠️ Voice not found for ${lang}, using default.`);
+            }
+
+            window.speechSynthesis.speak(u);
+        }
+
+        // --- STT ---
+        let recognition = null;
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.onstart = () => {
+                document.getElementById('mic-btn').className = 'listening';
+                if (nativeLang) document.getElementById('user-input').placeholder = UI_TEXT[nativeLang].listening;
+            };
+            recognition.onend = () => {
+                document.getElementById('mic-btn').className = '';
+                if (nativeLang) document.getElementById('user-input').placeholder = UI_TEXT[nativeLang].placeholder;
+            };
+            recognition.onresult = (e) => {
+                document.getElementById('user-input').value = e.results[0][0].transcript;
+            };
+        }
+        function toggleSTT() {
+            if (recognition && targetLang) {
+                recognition.lang = LANG_META[targetLang].tts;
+                recognition.start();
+            } else alert("Microphone not supported");
+        }
+
+        // --- Evaluation ---
+        async function evaluateAnswer() {
+            const input = document.getElementById('user-input').value;
+            if (!input) return;
+
+            const resultArea = document.getElementById('result-area');
+            resultArea.style.display = 'block';
+            resultArea.innerHTML = '<div>Analyzing... 🧠</div>';
+
+            const idx = document.getElementById('question-select').value;
+            const q = currentCategoryQuestions[idx];
+            if (!q) return;
+
+            const t = UI_TEXT[nativeLang] || UI_TEXT['en'];
 
             try {
-                const response = await fetch(`${AI_BASE}/koto-ai/api/v1/evaluate`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                const response = await fetch(`${API_BASE}/koto-ai/api/v1/evaluate`, {
+                    method: 'POST', text: input,
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        user_text: userInput,
-                        expected_pattern: questionData.expected,
-                        context: {
-                            lang_pack: langPack,
-                            difficulty: questionData.difficulty
-                        },
-                        use_rules: false
+                        user_text: input, expected_pattern: q[targetLang],
+                        context: { target_lang: targetLang, native_lang: nativeLang }
                     })
                 });
-
                 const data = await response.json();
 
-                // 결과 표시
-                const scoreClass = data.score >= 95 ? 'perfect' : 'good';
-                resultDiv.innerHTML = `
-                    <div class="score ${scoreClass}">${data.score}점</div>
-                    <div class="feedback">
-                        <strong>피드백:</strong><br>
-                        ${data.feedback}
+                const score = (data.score === undefined || data.score === null) ? 0 : Number(data.score);
+
+                // 프론트엔드 방어: 피드백이 없거나 ... 이면 기본 메시지 출력
+                let feedbackText = data.feedback;
+                if (!feedbackText || feedbackText.trim() === "..." || feedbackText.trim() === "") {
+                    // Fallback Text Localization
+                    if (nativeLang === 'ko') feedbackText = "AI 피드백이 없습니다.";
+                    else if (nativeLang === 'id') feedbackText = "Tidak ada respons dari AI."; // 인니어 Fix
+                    else feedbackText = "No feedback received.";
+                }
+
+                let color = '#f44336';
+                let msg = t.msgBad; // Default: Bad (Localized)
+
+                if (score >= 90) {
+                    color = '#4CAF50';
+                    msg = t.msgPerfect;
+                } else if (score >= 60) {
+                    color = '#FF9800';
+                    msg = t.msgGood;
+                }
+
+                const esc = (s) => s ? s.replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, ' ') : '';
+
+                const showCorrection = score < 90;
+                const correctText = data.corrected || q[targetLang];
+                const feedbackTts = LANG_META[nativeLang].tts;
+                const correctTts = LANG_META[targetLang].tts;
+
+                // --- UI Rendering ---
+                let html = `
+                    <div class="score-wrap">
+                        <span class="score-val" style="color:${color}">${score}</span>
+                        <span class="score-msg" style="color:${color}">${msg}</span>
                     </div>
-                    ${data.corrected !== userInput ? `
-                        <div style="margin-top: 15px; padding: 10px; background: #fff3e0; border-radius: 8px;">
-                            <strong>수정된 답변:</strong><br>
-                            ${data.corrected}
-                        </div>
-                    ` : ''}
                 `;
 
-            } catch (error) {
-                resultDiv.className = 'result show error';
-                resultDiv.innerHTML = `오류: ${error.message}<br><br>서버가 실행 중인지 확인하세요.`;
+                // 1. Correct Answer
+                if (showCorrection) {
+                    html += `
+                        <div class="correct-box" style="border-color:${color}">
+                            <span class="correct-label">📢 ${t.correction}</span>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span class="correct-text" style="color:${color}">${correctText}</span>
+                                <button class="audio-sm-btn big-btn" onclick="speak('${esc(correctText)}', '${correctTts}')">🔊 ${t.listen}</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // 2. AI Feedback (Hidden)
+                html += `
+                    <div style="text-align:center; margin-top:15px;">
+                        <button class="toggle-feedback-btn" onclick="toggleFeedback()">
+                            💡 ${t.why}
+                        </button>
+                    </div>
+                    
+                    <div id="ai-feedback-box" class="feedback-box" style="display:none;">
+                        <span class="feedback-label">${t.aiName}</span>
+                        <div style="line-height:1.5;">
+                             ${feedbackText}
+                             <button class="audio-sm-btn" style="border:none;" onclick="speak('${esc(feedbackText)}', '${feedbackTts}')">🔊</button>
+                        </div>
+                    </div>
+                `;
+
+                resultArea.innerHTML = html;
+
+            } catch (e) {
+                resultArea.innerHTML = `Error: ${e.message}`;
             }
         }
 
-        // Enter 키로 평가
-        document.getElementById('user-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                evaluate();
-            }
-        });
+        function toggleFeedback() {
+            const box = document.getElementById('ai-feedback-box');
+            box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+        }
     </script>
 </body>
 

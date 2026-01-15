@@ -44,7 +44,8 @@ class EvaluationService:
         
         # Step 1: 규칙 기반 평가 (빠른 판정)
         if use_rules:
-            rule_result = self._evaluate_by_rules(user_text, expected_pattern)
+            lang_pack = context.get("lang_pack", "ko-en")
+            rule_result = self._evaluate_by_rules(user_text, expected_pattern, lang_pack)
             
             # confidence >= 0.9면 LLM 호출 생략
             if rule_result["confidence"] >= self.confidence_threshold:
@@ -76,17 +77,30 @@ class EvaluationService:
     def _evaluate_by_rules(
         self,
         user_text: str,
-        expected_pattern: str
+        expected_pattern: str,
+        lang_pack: str = "ko-en"
     ) -> Dict[str, Any]:
         """
-        규칙 기반 평가 (ver0.1 간단 버전)
-        
-        TODO: 정교한 규칙 추가
+        규칙 기반 평가 (다국어 지원)
         """
         
-        # 간단한 매칭
-        normalized_user = user_text.strip().lower()
-        normalized_expected = expected_pattern.strip().lower()
+        # 구두점 제거 및 정규화 함수
+        def normalize(text):
+            import re
+            # 소문자 변환, 앞뒤 공백 제거
+            text = text.strip().lower()
+            # 특수문자/구두점 제거 (문자와 숫자, 한글만 남김)
+            text = re.sub(r'[^\w\s가-힣]', '', text)
+            # 공백도 제거 (선택사항, 하지만 띄어쓰기 실수 너그럽게 봐주려면 제거)
+            text = text.replace(" ", "")
+            return text
+
+        normalized_user = normalize(user_text)
+        normalized_expected = normalize(expected_pattern)
+        
+        # 메시지 템플릿
+        msg_perfect = "Perfect!" if lang_pack == "ko-en" else "Sempurna! Sangat bagus."
+        msg_close = "Good! Very close." if lang_pack == "ko-en" else "Bagus! Hampir benar."
         
         # 정확히 일치
         if normalized_user == normalized_expected:
@@ -95,7 +109,7 @@ class EvaluationService:
                 "pass_fail": True,
                 "primary_error_type": "none",
                 "errors": [],
-                "feedback": "Perfect!",
+                "feedback": msg_perfect,
                 "corrected": expected_pattern,
                 "confidence": 1.0,
                 "provider": "rule"

@@ -12,17 +12,26 @@ class GoogleTTSProvider(TTSProvider):
     def __init__(self, config: Dict[str, Any] = None):
         super().__init__(config)
         
-        # Google Cloud 인증
-        credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-        if not credentials_path:
-            # Fallback: API 키 사용 (제한적)
-            print("Warning: GOOGLE_APPLICATION_CREDENTIALS not set. Using API key fallback.")
+        # Google Cloud 인증 처리
+        # 1. 서비스 계정 파일 확인
+        creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
         
-        # TTS 클라이언트 초기화
-        self.client = texttospeech.TextToSpeechClient()
+        if creds_path and os.path.exists(creds_path):
+            self.client = texttospeech.TextToSpeechClient()
+        else:
+            # 2. 파일 없으면 API Key 사용 (GEMINI_API_KEY 공유)
+            print("Warning: GOOGLE_APPLICATION_CREDENTIALS not found. Trying API Key fallback.")
+            from google.api_core.client_options import ClientOptions
+            
+            api_key = os.getenv("GEMINI_API_KEY")
+            if not api_key:
+                raise ValueError("No Google Cloud Credentials provided (File or API Key)")
+                
+            client_options = ClientOptions(api_key=api_key)
+            self.client = texttospeech.TextToSpeechClient(client_options=client_options)
         
-        # 기본 설정
-        self.default_voice = self.config.get("default_voice", "ko-KR-Wavenet-A")
+        # 기본 설정 (Standard-C 남성)
+        self.default_voice = self.config.get("default_voice", "ko-KR-Standard-C")
         self.default_language = self.config.get("default_language", "ko-KR")
         self.timeout = self.config.get("timeout", 2.0)
     
@@ -81,6 +90,14 @@ class GoogleTTSProvider(TTSProvider):
         voice = voice or self.default_voice
         language = language or self.default_language
         
+        if not voice or (language not in voice): # 언어가 바뀌었는데 보이스가 안 바뀐 경우
+            if language == "en-US":
+                voice = "en-US-Standard-D" # Neural2 대신 Standard (남성)
+            elif language == "id-ID":
+                voice = "id-ID-Standard-A"  # 여성 (Standard A)
+            elif language == "ko-KR":
+                voice = "ko-KR-Standard-C" # Neural2 대신 Standard (남성)
+        
         try:
             # TTS 요청 설정
             synthesis_input = texttospeech.SynthesisInput(text=text)
@@ -92,7 +109,7 @@ class GoogleTTSProvider(TTSProvider):
             
             audio_config = texttospeech.AudioConfig(
                 audio_encoding=texttospeech.AudioEncoding.MP3,
-                speaking_rate=1.0,
+                speaking_rate=0.9, # 학습용이라 조금 천천히 또박또박
                 pitch=0.0
             )
             
