@@ -1,0 +1,59 @@
+.
+├── ai
+│   ├── config
+│   ├── main.py
+│   ├── models
+│   ├── providers
+│   ├── README.md
+│   ├── requirements.txt
+│   ├── routes
+│   ├── services
+│   └── utils
+├── api
+│   ├── logs
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── src
+│   └── tests
+├── CHANGES.md
+├── DAY1_COMPLETE_FINAL.md
+├── DAY1_COMPLETE.md
+├── DAY1_FINAL_REPORT.md
+├── db
+│   ├── migrations
+│   └── seeds
+├── docker-compose.yml
+├── docs
+│   ├── AI_POLICY.md
+│   ├── ARCHITECTURE.md
+│   └── SCALING_CHECKPOINTS.md
+├── FINAL_COMPLETION_REPORT.md
+├── FINAL_HARDENING.md
+├── FINAL_REPORT.md
+├── GEMINI_TEST_SUCCESS.md
+├── infrastructure
+│   ├── docker
+│   ├── monitoring
+│   └── scripts
+├── MASTER_PLAN.md
+├── 서버_인프라_조사_보고서.md
+├── NEXT_STEPS.md
+├── PHASE1_MILESTONES.md
+├── PHASE1_SUMMARY.md
+├── PROGRESS_REPORT.md
+├── PROGRESS_UPDATE.md
+├── PROJECT_STRUCTURE.txt
+├── PROJECT_SUMMARY.md
+├── QUICK_START.md
+├── README.md
+├── REVISION_NOTES.md
+├── secrets
+│   └── README.md
+├── SESSION_END_DAY1.md
+├── shared
+│   ├── constants
+│   └── types
+├── test_integration.sh
+└── unity
+
+25 directories, 32 files
