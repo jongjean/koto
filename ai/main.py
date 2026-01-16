@@ -52,9 +52,11 @@ async def root():
 # Routes
 from routes.evaluation import router as eval_router
 from routes.tts import router as tts_router
+from routes.feedback import router as feedback_router
 
 app.include_router(eval_router)
 app.include_router(tts_router)
+app.include_router(feedback_router)
 
 if __name__ == "__main__":
     import uvicorn

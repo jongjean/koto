@@ -133,3 +133,4 @@ minio-data/
 # Misc
 .hugo_build.lock
 *.pid
+feedbacks/
